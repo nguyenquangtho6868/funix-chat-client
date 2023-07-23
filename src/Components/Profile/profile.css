@@ -1,4 +1,5 @@
 .user-image {
     width: 50%;
     cursor: pointer;
+    border-radius: 50%;
 }

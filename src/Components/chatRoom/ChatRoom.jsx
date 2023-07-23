@@ -158,7 +158,7 @@ function ChatRoomComponent() {
                     }
                 }, roomId);
             }
-        }, userId);
+        }, userId); 
     }, []);
 
     useEffect(() => {
@@ -277,12 +277,12 @@ function ChatRoomComponent() {
                                                     <Avatar
                                                         className={obj.sender.role === 'MENTOR' || obj.sender.role === 'ADMIN' ? 'display-none' : ''}
                                                         sx={{ height: '24px', width: '24px' }}
-                                                        src={require('../../assets/img/logo-funix.png')}
+                                                        src={obj.sender.file? obj.sender.file : require('../../assets/img/logo-funix.png')}
                                                     />
                                                     <Avatar
                                                         className={obj.sender.role === 'STUDENT' ? 'display-none' : ''}
                                                         sx={{ height: '24px', width: '24px' }}
-                                                        src={require('../../assets/img/mentor.png')}
+                                                        src={obj.sender.file? obj.sender.file : require('../../assets/img/mentor.png')}
                                                     />
                                                 </Grid>
                                                 <List>
