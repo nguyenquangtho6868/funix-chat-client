@@ -6,6 +6,7 @@ import { getUserDetail } from '../../Services/UserService';
 import { toast } from 'react-toastify';
 import { uploadFile } from '../../uploadfile/uploadfile';
 import { editImageUser } from '../../Services/UserService';
+import { ColorRing } from 'react-loader-spinner';
 import './profile.css';
 
 
@@ -13,12 +14,16 @@ function ProfileComponent() {
     const role = localStorage.getItem('role');
     const userId = localStorage.getItem('userId');
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleGetUserDetail = () => {
         getUserDetail((rs) => {
             if (rs.statusCode === 200) {
                 console.log(rs.data);
                 setUser(rs.data);
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 300)
             } else {
                 toast.error('Có lỗi trong quá trình xử lý!')
             }
@@ -46,24 +51,35 @@ function ProfileComponent() {
             <Grid className='layout-mentor'>
                 <Grid container>
                     <Grid item xs={4} lg={5}>
-                        {
-                            user && user.file ? <Box sx={{ height: '100%' }} display="flex" justifyContent="center" alignItems="center">
-                                <img className='user-image' src={user.file} alt="" />
-                            </Box>
-                                :
-                                <Box sx={{ height: '100%' }} display="flex" justifyContent="center" alignItems="center">
-                                    <input
-                                        id="image-user"
-                                        type="file"
-                                        hidden
-                                        onChange={(e) => handleGetFile(e)}
-                                    />
-                                    <label htmlFor="image-user" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                        <img className='user-image' style={{ width: '50%' }} src={require('../../assets/img/add-image.jpg')} alt="" />
-                                    </label>
+                        {isLoading ? <Box sx={{ height: '100%' }} display="flex" justifyContent="center" alignItems="center">
+                            <ColorRing
+                                visible={true}
+                                height="80"
+                                width="80"
+                                ariaLabel="blocks-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="blocks-wrapper"
+                                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                            />
+                        </Box> : <Box>
+                            {
+                                user && user.file ? <Box sx={{ height: '100%' }} display="flex" justifyContent="center" alignItems="center">
+                                    <img className='user-image' src={user.file} alt="" />
                                 </Box>
-                        }
-
+                                    :
+                                    <Box sx={{ height: '100%' }} display="flex" justifyContent="center" alignItems="center">
+                                        <input
+                                            id="image-user"
+                                            type="file"
+                                            hidden
+                                            onChange={(e) => handleGetFile(e)}
+                                        />
+                                        <label htmlFor="image-user" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                            <img className='user-image' style={{ width: '50%' }} src={require('../../assets/img/add-image.jpg')} alt="" />
+                                        </label>
+                                    </Box>
+                            }
+                        </Box>}
                     </Grid>
 
                     <Grid item xs={8} lg={7}>
@@ -72,7 +88,7 @@ function ProfileComponent() {
                                 <Box sx={{ width: '100%', paddingBottom: '3rem' }} display="flex" justifyContent="center"  >
                                     <Typography variant='h2'>Thông Tin Tài Khoản</Typography>
                                 </Box>
-                                <Box display="flex"   marginBottom="2rem">
+                                <Box display="flex" marginBottom="2rem">
                                     <Typography
                                         sx={{
                                             alignSelf: 'center',
@@ -97,7 +113,7 @@ function ProfileComponent() {
                                         {user.email}
                                     </Box>
                                 </Box>
-                                <Box display="flex"   marginBottom="2rem">
+                                <Box display="flex" marginBottom="2rem">
                                     <Typography
                                         sx={{
                                             alignSelf: 'center',
@@ -121,7 +137,7 @@ function ProfileComponent() {
                                         {user.username}
                                     </Box>
                                 </Box>
-                                <Box display="flex"   marginBottom="2rem">
+                                <Box display="flex" marginBottom="2rem">
                                     <Typography
                                         sx={{
                                             alignSelf: 'center',
@@ -146,7 +162,7 @@ function ProfileComponent() {
                                     </Box>
                                 </Box>
 
-                                <Box display="flex"   marginBottom="2rem">
+                                <Box display="flex" marginBottom="2rem">
                                     <Typography
                                         sx={{
                                             alignSelf: 'center',
