@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { ColorRing } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import { getRoomCheckUserId } from '../Services/RoomChatService';
+import { getUserDetail } from '../Services/UserService';
 
 export const AuthContext = createContext();
 function AuthLoginProvider({children}) {
@@ -10,6 +11,7 @@ function AuthLoginProvider({children}) {
     const userId  = localStorage.getItem('userId');
     const [isLoading, setIsLoading] = useState(false);
     const [isOutlet, setIsOutlet] = useState(false);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
       if(userId) {
@@ -18,14 +20,25 @@ function AuthLoginProvider({children}) {
             navigate(`/chat-room/${res.data._id}`)
           }
         }, userId);
+      } else {
+        navigate('/')
       }
-        
+
+      if(userId && role == null) {
+        getUserDetail((res) => {
+          console.log(res);
+          if(res.statusCode === 200) {
+            setRole(res.data.role);
+          }
+        }, userId, '');
+      }
+
       return () => {
         
       }
     }, [navigate]);
   return (
-    <AuthContext.Provider value={{setIsLoading, isOutlet, setIsOutlet}}>
+    <AuthContext.Provider value={{setIsLoading, isOutlet, setIsOutlet, setRole, role}}>
         {isLoading? <div className="loading">
             <ColorRing
               visible={true}

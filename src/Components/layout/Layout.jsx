@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -13,12 +13,13 @@ import './layout.css'
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
+import { AuthContext } from '../../Context/AuthLogin';
 
 
 function LayoutComponent({ children }) {
 
     const navigate = useNavigate();
-
+    const { setRole } = useContext(AuthContext);
     const moveToHome = () => {
         navigate('/home');
     }
@@ -33,6 +34,7 @@ function LayoutComponent({ children }) {
 
     const handleLogout = () => {
         localStorage.clear();
+        setRole(null);
         navigate('/');
     }
 

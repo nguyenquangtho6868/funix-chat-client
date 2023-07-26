@@ -5,6 +5,13 @@
     height: 100vh;
 }
 
+.loading-layout {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .layout-nav {
     justify-content: space-around;
     display: flex;

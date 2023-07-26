@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,6 @@ import Grid from '@mui/material/Grid';
 import { loginPage } from "../../Services/LoginService";
 import { AuthContext } from "../../Context/AuthLogin";
 import { Howl } from 'howler';
-
 
 function LoginComponent() {
 
@@ -49,7 +48,6 @@ function LoginComponent() {
           localStorage.setItem('token', res.token);
           localStorage.setItem('userId', res.userId);
           localStorage.setItem('username', res.username);
-          localStorage.setItem('role', res.role);
           localStorage.setItem('minutes', 0);
           localStorage.setItem('seconds', 0);
         } else {
