@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { API_URL } from '../../Constants/ApiConstant';
 import { Grid, Box, Typography, Button } from '@mui/material';
 import { getUserDetail } from '../../Services/UserService';
@@ -8,10 +8,11 @@ import { uploadFile } from '../../uploadfile/uploadfile';
 import { editImageUser } from '../../Services/UserService';
 import { ColorRing } from 'react-loader-spinner';
 import './profile.css';
+import { AuthContext } from '../../Context/AuthLogin'
 
 
 function ProfileComponent() {
-    const role = localStorage.getItem('role');
+    const { role } = useContext(AuthContext);
     const userId = localStorage.getItem('userId');
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -158,7 +159,7 @@ function ProfileComponent() {
                                             borderRadius: '5px'
                                         }}
                                     >
-                                        {user.role}
+                                        {role? role : ''}
                                     </Box>
                                 </Box>
 
