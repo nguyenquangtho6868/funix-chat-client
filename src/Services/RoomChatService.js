@@ -55,3 +55,17 @@ export function endRoomChat(callback, id) {
       .then(res => res.json())
       .then(callback);
 }
+
+export function getHistoryRoomChat(callback, userId) {
+    const token = localStorage.getItem('token');
+    fetch(`${API_URL}/get-history-room-chat`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({userId})
+    })
+      .then(res => res.json())
+      .then(callback);
+}

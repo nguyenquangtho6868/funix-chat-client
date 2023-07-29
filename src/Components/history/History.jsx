@@ -16,6 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { getHistoryRoomChat } from '../../Services/RoomChatService';
 
 const columns = [
     { id: 'email', label: 'Email', minWidth: 170 },
@@ -65,7 +66,9 @@ const rows = [
 ];
 
 function HistoryComponent() {
+
     const theme = useTheme();
+    const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
     const [value, setValue] = useState(dayjs('2022-04-17'));
     const [listHistory, setListHistory] = useState([
@@ -103,7 +106,9 @@ function HistoryComponent() {
     };
 
     useEffect(() => {
-
+        getHistoryRoomChat((rs) => {
+            console.log(rs);
+        },userId)
     }, [])
     return (
         <Grid container className='history'>
