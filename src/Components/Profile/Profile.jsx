@@ -184,7 +184,7 @@ function ProfileComponent() {
                                             borderRadius: '5px'
                                         }}
                                     >
-                                        {user.password}
+                                        <input style={{border: "none"}} type="password" value={user.password} />
                                     </Box>
                                 </Box>
                             </Box>

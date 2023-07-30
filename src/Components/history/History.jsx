@@ -117,7 +117,7 @@ function HistoryComponent() {
                     <Grid item xs={12} sm={6} md={3} lg={3} className='text-center-flex history-filter-item'>
                         <TextField
                             id="outlined-basic"
-                            label="Email Mentor"
+                            label="Email"
                             variant="outlined"
                             className='history-filter-item-text history-email'
                         />
