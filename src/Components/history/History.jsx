@@ -20,49 +20,35 @@ import { getHistoryRoomChat } from '../../Services/RoomChatService';
 
 const columns = [
     { id: 'email', label: 'Email', minWidth: 170 },
-    { id: 'code', label: 'Code Course', minWidth: 100 },
+    { id: 'code', label: 'Code Course', minWidth: 30 },
     {
         id: 'start',
         label: 'Start Date',
-        minWidth: 170,
+        minWidth: 100,
         align: 'right',
     },
     {
         id: 'end',
         label: 'End Date',
-        minWidth: 170,
+        minWidth: 100,
         align: 'right',
         format: (value) => value.toLocaleString('en-US'),
     },
     {
-        id: 'density',
-        label: 'Density',
-        minWidth: 170,
+        id: 'rate',
+        label: 'Rating',
+        minWidth: 100,
         align: 'right',
         format: (value) => value.toFixed(2),
     },
 ];
 
-function createData(email, code, start, end ) {
-    return { email, code, start,end};
+function createData(email, code, start, end, rate, status, room_id ) {
+    return { email, code, start, end, rate, status, room_id};
 }
 
 const rows = [
     createData('India', 'IN', '03/05/2022', '04/06/2023'),
-    createData('China', 'CN', '03/05/2022', '04/06/2023'),
-    createData('Italy', 'IT', '03/05/2022', '04/06/2023'),
-    createData('United States', 'US', '03/05/2022', '04/06/2023'),
-    createData('Canada', 'CA', '03/05/2022', '04/06/2023'),
-    createData('Australia', 'AU', '03/05/2022', '04/06/2023'),
-    createData('Germany', 'DE', '03/05/2022', '04/06/2023'),
-    createData('Ireland', 'IE', '03/05/2022', '04/06/2023'),
-    createData('Mexico', 'MX', '03/05/2022', '04/06/2023'),
-    createData('Japan', 'JP', '03/05/2022', '04/06/2023'),
-    createData('France', 'FR', '03/05/2022', '04/06/2023'),
-    createData('United Kingdom', 'GB', '03/05/2022', '04/06/2023'),
-    createData('Russia', 'RU', '03/05/2022', '04/06/2023'),
-    createData('Nigeria', 'NG', '03/05/2022', '04/06/2023'),
-    createData('Brazil', 'BR', '03/05/2022', '04/06/2023'),
 ];
 
 function HistoryComponent() {
@@ -70,16 +56,7 @@ function HistoryComponent() {
     const theme = useTheme();
     const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
-    const [value, setValue] = useState(dayjs('2022-04-17'));
-    const [listHistory, setListHistory] = useState([
-        {
-            code: 'NODEJS',
-            start_date: '',
-            end_date: '',
-            email_mentor: ''
-        },
-    ]);
-
+    const [listHistory, setListHistory] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -93,23 +70,32 @@ function HistoryComponent() {
         setPage(0);
     };
 
-    const moveToChatRoom = (event) => {
-        navigate('/chat-room')
-    };
-
-    const moveToGroupChat = (event) => {
-        navigate('/home/group-chat-mentor')
-    };
-
-    const moveToGroupChatMobile = (event) => {
-        navigate('/group-chat-mentor')
+    const moveToGroupChat = (id) => {
+        console.log(id);
     };
 
     useEffect(() => {
         getHistoryRoomChat((rs) => {
             console.log(rs);
-        },userId)
-    }, [])
+            if(rs.statusCode === 200 && rs.data.length > 0) {
+                const dataToRow = rs.data.map(obj => {
+                    // Lấy ra user trò chuyện với user hiện tại
+                    const getUser = obj.users.filter(user => user._id !== userId);
+                    return createData(
+                        getUser[0].email,
+                        obj.courses.code,
+                        obj.start_date.split(' ')[0],
+                        obj.end_date.split(' ')[0],
+                        obj.rate,
+                        obj.status,
+                        obj._id
+                    );
+                });
+                console.log(dataToRow);
+                setListHistory(dataToRow);
+            }
+        },userId);
+    }, []);
     return (
         <Grid container className='history'>
             <Grid xs={12} item mb={2}>
@@ -163,11 +149,18 @@ function HistoryComponent() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows
+                                {listHistory.length > 0 &&  listHistory
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row) => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow 
+                                                style={{cursor: 'pointer'}} 
+                                                onClick={() => moveToGroupChat(row.room_id)} 
+                                                hover 
+                                                role="checkbox" 
+                                                tabIndex={-1} 
+                                                key={row.code}
+                                            >
                                                 {columns.map((column) => {
                                                     const value = row[column.id];
                                                     return (

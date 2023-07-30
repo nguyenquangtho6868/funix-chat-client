@@ -9,7 +9,7 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../Constants/ApiConstant';
 import { Avatar, Box } from '@mui/material';
-
+import { format } from 'date-fns';
 import io from 'socket.io-client';
 
 const socket = io(API_URL);
@@ -62,7 +62,8 @@ function LayoutOfStudentComponent() {
                 description: values.description,
                 file: null,
                 course_id: values.course_id,
-                user_id: userId
+                user_id: userId,
+                start_date: format(new Date(), 'dd/MM/yyyy HH:mm')
             }
             resetForm();
             socket.emit('post-notification', { data, mentors });

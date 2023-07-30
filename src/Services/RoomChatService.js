@@ -42,7 +42,7 @@ export function getRoomCheckUserId(callback, userId) {
       .then(callback);
 }
 
-export function endRoomChat(callback, id) {
+export function endRoomChat(callback, data) {
     const token = localStorage.getItem('token');
     fetch(`${API_URL}/end-room-chat-detail`, {
         method: 'POST',
@@ -50,7 +50,7 @@ export function endRoomChat(callback, id) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({id})
+        body: JSON.stringify(data)
     })
       .then(res => res.json())
       .then(callback);
@@ -67,5 +67,19 @@ export function getHistoryRoomChat(callback, userId) {
         body: JSON.stringify({userId})
     })
       .then(res => res.json())
+      .then(callback);
+}
+
+export function postRate(callback, data) {
+    const token = localStorage.getItem("token");
+    fetch(`${API_URL}/post-rate-room-chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
       .then(callback);
 }
