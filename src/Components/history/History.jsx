@@ -71,7 +71,7 @@ function HistoryComponent() {
     };
 
     const moveToGroupChat = (id) => {
-        console.log(id);
+        navigate(`/view-chat-history/${id}`);
     };
 
     useEffect(() => {
@@ -91,7 +91,6 @@ function HistoryComponent() {
                         obj._id
                     );
                 });
-                console.log(dataToRow);
                 setListHistory(dataToRow);
             }
         },userId);
