@@ -202,7 +202,7 @@ function LayoutOfStudentComponent() {
                                 {
                                     mentors.length > 0 && mentors.map((item, key) => {
                                         return <Box sx={{ paddingRight: '1rem' }} key={key}>
-                                            <Avatar alt={item.user.username} src="./assets/img/mentor.png" />
+                                            <Avatar alt={item.user.username} src={item.user?.file?item.user?.file : "./assets/img/mentor.png"} />
                                             <Typography>{item.user.username}</Typography>
                                         </Box>
                                     })
