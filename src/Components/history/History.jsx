@@ -82,7 +82,7 @@ function HistoryComponent() {
                     // Lấy ra user trò chuyện với user hiện tại
                     const getUser = obj.users.filter(user => user._id !== userId);
                     return createData(
-                        getUser[0].email,
+                        getUser[0]?.email,
                         obj.courses.code,
                         obj.start_date.split(' ')[0],
                         obj.end_date.split(' ')[0],
