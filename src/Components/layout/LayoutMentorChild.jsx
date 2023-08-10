@@ -52,7 +52,7 @@ function LayoutMentorChildComponent() {
 
     useEffect(() => {
 
-        socket.on('quantity-room-chat-full', () => {
+        socket.on(`quantity-room-chat-full/${userId}`, () => {
             toast.warning('Phòng này đã có Mentor hỗ trợ!');
         });
 

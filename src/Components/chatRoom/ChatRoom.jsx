@@ -51,10 +51,6 @@ function ChatRoomComponent() {
   const [seconds, setSeconds] = useState(0);
   const [rate, setRate] = useState(false);
   const [valueRate, setValueRate] = useState(null);
-  const mentor =
-    conversations.find((c) => c.sender.role === "MENTOR") === undefined
-      ? false
-      : true;
 
   const endConversation = () => {
     // Lấy thông tin phòng để kiểm tra xem đã có mentor vào phòng hay chưa rồi chia 2 trường hợp kết thúc
@@ -67,17 +63,15 @@ function ChatRoomComponent() {
             if (rs.statusCode === 200) {
               localStorage.setItem("seconds", 0);
               localStorage.setItem("minutes", 0);
-              socket.emit("end-conversation", mentor);
-              if(role === 'STUDENT') {
+              socket.emit("end-conversation", roomId);
+              if (role === 'STUDENT') {
                 setRate(true);
               } else {
                 navigate("/home");
                 toast.success("Buổi trao đổi kết thúc!");
               }
-            } else {
-              toast.error("Có lỗi trong quá trình xử lý!");
             }
-          }, {end_date, roomId, status: 'Closed'});
+          }, { end_date, roomId, status: 'Closed' });
         } else {
           endRoomChat((rs) => {
             if (rs.statusCode === 200) {
@@ -85,13 +79,10 @@ function ChatRoomComponent() {
               toast.success("Buổi trao đổi kết thúc!");
               localStorage.setItem("seconds", 0);
               localStorage.setItem("minutes", 0);
-            } else {
-              toast.error("Có lỗi trong quá trình xử lý!");
             }
-          }, {end_date, roomId, status: 'Cancelled'});
+          }, { end_date, roomId, status: 'Cancelled' });
         }
       } else {
-        toast.error("Có lỗi trong quá trình xử lý!");
         return;
       }
     }, roomId);
@@ -153,7 +144,7 @@ function ChatRoomComponent() {
     if (minutes < getMinutes) setMinutes(getMinutes);
     if (seconds < getSeconds) setSeconds(getSeconds);
     const countdown = setInterval(() => {
-      if (mentor) {
+      if (isMentorIn) {
         if (seconds === 59) {
           setMinutes((prev) => {
             localStorage.setItem("minutes", prev + 1);
@@ -172,7 +163,7 @@ function ChatRoomComponent() {
     }, 1000);
 
     return () => clearInterval(countdown);
-  }, [minutes, seconds, mentor]);
+  }, [minutes, seconds, isMentorIn]);
 
   useEffect(() => {
     getRoomCheckUserId((res) => {
@@ -208,12 +199,13 @@ function ChatRoomComponent() {
       setConversations((prev) => [...prev.slice(0, prev.length - 1), ...data]);
     });
 
-    socket.on(`mentor-in-room-chat/${roomId}`, (data) => {
+    socket.on(`mentor-in-room-chat/${roomId}`, () => {
       setIsMentorIn(true);
     });
 
-    socket.on(`end-conversation-success/${userId}`, () => {
-      if(role === 'STUDENT') {
+    socket.on(`end-conversation-success/${roomId}`, () => {
+      console.log(role);
+      if (role === 'STUDENT') {
         setRate(true);
       } else {
         navigate("/home");
@@ -303,7 +295,7 @@ function ChatRoomComponent() {
           });
         }
       }
-    }, {roomId, rate: valueRate});
+    }, { roomId, rate: valueRate });
   };
 
   if (minutes >= 1 && seconds > 10) {
@@ -402,7 +394,7 @@ function ChatRoomComponent() {
                           <Avatar
                             className={
                               obj.sender.role === "MENTOR" ||
-                              obj.sender.role === "ADMIN"
+                                obj.sender.role === "ADMIN"
                                 ? "display-none"
                                 : ""
                             }
