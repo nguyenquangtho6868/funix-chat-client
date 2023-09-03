@@ -13,7 +13,7 @@ import { Howl } from "howler";
 
 function LoginComponent() {
   const navigate = useNavigate();
-  const { setIsLoading } = useContext(AuthContext);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -29,7 +29,6 @@ function LoginComponent() {
         .required("Trường này là băt buộc!"),
     }),
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      setIsLoading(true);
       setSubmitting(true);
       let data = {
         password: values.password,
@@ -40,7 +39,7 @@ function LoginComponent() {
           toast.success("Đăng nhập thành công!");
           setTimeout(() => {
             navigate("/home");
-            setIsLoading(false);
+
             const sound = new Howl({
               src: [require("../../assets/sounds/sound-login.mp3")], // Đường dẫn đến file âm thanh
             });
@@ -54,7 +53,6 @@ function LoginComponent() {
           localStorage.setItem("seconds", 0);
         } else {
           setTimeout(() => {
-            setIsLoading(false);
             toast.error("Tên đăng nhập hoặc mật khẩu không đúng!");
             setSubmitting(false);
             navigate("/");
