@@ -58,7 +58,7 @@ function ChatRoomStudent() {
   const [times, setTimes] = useState(null);
   const [timesBlock, setTimesBlock] = useState(null);
   const [timesBlockAdd, setTimesBlockAdd] = useState(null);
-  const [block, setBlock] = useState(0);
+  const [block, setBlock] = useState(null);
   const [blockAdd, setBlockAdd] = useState(false);
   const courseId = localStorage.getItem("idCourse");
   console.log({ courseId });
