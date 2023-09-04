@@ -58,7 +58,7 @@ function ChatRoomStudent() {
   const [times, setTimes] = useState(null);
   const [timesBlock, setTimesBlock] = useState(null);
   const [timesBlockAdd, setTimesBlockAdd] = useState(null);
-  const [block, setBlock] = useState(null);
+  const [block, setBlock] = useState(0);
   const [blockAdd, setBlockAdd] = useState(false);
   const courseId = localStorage.getItem("idCourse");
   console.log({ courseId });
@@ -192,10 +192,13 @@ function ChatRoomStudent() {
     }
   }, [times, timesBlock, timesBlockAdd]);
   useEffect(() => {
-    if (Number(times) > Number(block) * Number(timesBlock) * 60) {
+    if (
+      block !== 0 &&
+      Number(times) > Number(block) * Number(timesBlock) * 60
+    ) {
       endConversation();
     }
-  }, [times, timesBlock]);
+  }, [times, timesBlock, block]);
   useEffect(() => {
     socket.on("create-new-message", (data) => {
       setConversations((prev) => [...prev, ...data]);
